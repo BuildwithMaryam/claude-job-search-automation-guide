@@ -22,7 +22,7 @@ A comprehensive, step-by-step guide for setting up automated job searching using
 
 ## 🚀 Live Demo
 
-Visit the live guide: [Claude Cowork Job Search Automation Guide](https://maryamrez.github.io/claude-job-search-automation-guide/)
+Visit the live guide: [Claude Cowork Job Search Automation Guide](https://buildwithmaryam.github.io/claude-job-search-automation-guide/)
 
 ## 💻 Local Development
 
