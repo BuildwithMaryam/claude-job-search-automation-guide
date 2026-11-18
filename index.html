@@ -1215,11 +1215,12 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
             font-size: .75rem; color: var(--dark); background: var(--primary);
         }
         .gate-embed {
-            height: 110px; overflow: hidden; border-radius: 12px; margin-bottom: 1.25rem;
+            padding-top: 10px; border-radius: 12px; margin-bottom: 1.25rem;
             background: #090D11; border: 1px solid var(--border-light);
         }
+        .gate-embed div { height: 104px; overflow: hidden; }
         .gate-embed iframe {
-            display: block; width: 100%; height: 320px; margin-top: -180px; border: 0;
+            display: block; width: 100%; height: 320px; margin-top: -190px; border: 0;
             filter: invert(1) hue-rotate(180deg);
         }
         .gate-continue {
@@ -1237,6 +1238,7 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
             .gate-card { padding: 1.75rem 1.25rem 1.5rem; }
             .gate-card h2 { font-size: 1.45rem; }
         }
+        @media (max-width: 360px) { .gate-embed div { height: 124px; } }
     </style>
 
     <div class="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
@@ -1250,7 +1252,7 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
 
             <div class="gate-step"><b>1</b>Subscribe with your email</div>
             <div class="gate-embed">
-                <iframe src="https://newsletter.maryamreza.com/embed" title="Subscribe to Build with Maryam" scrolling="no" sandbox="allow-scripts allow-forms allow-same-origin"></iframe>
+                <div><iframe src="https://newsletter.maryamreza.com/embed" title="Subscribe to Build with Maryam" scrolling="no" sandbox="allow-scripts allow-forms allow-same-origin"></iframe></div>
             </div>
 
             <div class="gate-step"><b>2</b>Open the guide</div>
