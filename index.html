@@ -1214,7 +1214,6 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
             display: inline-grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%;
             font-size: .75rem; color: var(--dark); background: var(--primary);
         }
-        /* Substack embed, cropped to its email field + terms and inverted to match the dark card */
         .gate-embed {
             height: 110px; overflow: hidden; border-radius: 12px; margin-bottom: 1.25rem;
             background: #090D11; border: 1px solid var(--border-light);
@@ -1231,6 +1230,8 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
         }
         .gate-continue:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(163,255,18,.28); }
         .gate-continue:disabled { cursor: not-allowed; color: var(--gray-500); background: var(--gray-800); box-shadow: none; }
+        .gate-progress { height: 4px; margin-top: .6rem; border-radius: 2px; overflow: hidden; background: var(--gray-800); }
+        .gate-progress i { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); transition: width linear; }
         .gate-hint { font-size: .8rem; color: var(--gray-500); margin-top: .5rem; min-height: 1.2em; }
         .gate-continue:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
         .gate-disclaimer { font-size: .78rem; color: var(--gray-500); margin-top: 1.1rem; line-height: 1.55; }
@@ -1256,6 +1257,7 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
 
             <div class="gate-step"><b>2</b>Open the guide</div>
             <button type="button" class="gate-continue" id="gate-continue" disabled aria-describedby="gate-hint">Done, show me the guide <span aria-hidden="true">&rarr;</span></button>
+            <div class="gate-progress" hidden><i></i></div>
             <p class="gate-hint" id="gate-hint" aria-live="polite">Subscribe in step 1 first</p>
 
             <p class="gate-disclaimer">
@@ -1265,37 +1267,6 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
         </div>
     </div>
 
-    <script>
-    (function () {
-        var KEY = 'guide_unlocked';
-        var unlocked = false;
-        try { unlocked = localStorage.getItem(KEY) === '1'; } catch (e) {}
-        if (!unlocked) document.body.classList.add('gated');
-
-        // Soft lock: Substack's box can't report a signup, so enable step 2 only after
-        // the visitor has clicked into the box, plus a short delay to finish subscribing.
-        var WAIT = 9;
-        var btn = document.getElementById('gate-continue'), hint = document.getElementById('gate-hint');
-        var frame = document.querySelector('.gate-embed iframe'), started = false;
-        function startCountdown() {
-            if (started || document.activeElement !== frame) return;
-            started = true;
-            var left = WAIT;
-            (function tick() {
-                if (left <= 0) { btn.disabled = false; hint.textContent = ''; return; }
-                hint.textContent = 'Finish subscribing above, then continue (' + left-- + 's)';
-                setTimeout(tick, 1000);
-            })();
-        }
-        window.addEventListener('blur', function () { setTimeout(startCountdown, 0); });
-        var poll = setInterval(function () { started ? clearInterval(poll) : startCountdown(); }, 500);
-
-        btn.addEventListener('click', function () {
-            if (btn.disabled) return;
-            try { localStorage.setItem(KEY, '1'); } catch (e) {}
-            document.body.classList.remove('gated');
-        });
-    })();
-    </script>
+    <script>(function(){var k='guide_unlocked',d=document,b=d.body,u;try{u=localStorage.getItem(k)==='1'}catch(e){}if(!u)b.classList.add('gated');var c=d.getElementById('gate-continue'),h=d.getElementById('gate-hint'),f=d.querySelector('.gate-embed iframe'),r=d.querySelector('.gate-progress'),p=r.firstChild,s=0,t=3*3e3;function g(){if(s||d.activeElement!==f)return;s=1;h.textContent='Finish subscribing above, then continue';r.hidden=false;p.style.transitionDuration=t+'ms';requestAnimationFrame(function(){requestAnimationFrame(function(){p.style.width='100%'})});setTimeout(function(){c.disabled=false;h.textContent='';r.hidden=true},t)}addEventListener('blur',function(){setTimeout(g,0)});var q=setInterval(function(){s?clearInterval(q):g()},500);c.addEventListener('click',function(){if(c.disabled)return;try{localStorage.setItem(k,'1')}catch(e){}b.classList.remove('gated')})})();</script>
 </body>
 </html>
