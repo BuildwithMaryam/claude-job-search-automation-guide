@@ -84,7 +84,7 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 600px;
+            width: min(600px, 100vw);
             height: 400px;
             background: radial-gradient(ellipse, rgba(91, 140, 255, 0.25) 0%, rgba(0, 212, 255, 0.15) 40%, transparent 70%);
             filter: blur(80px);
@@ -1166,5 +1166,136 @@ Focus on quality over quantity. I'd rather see 5 great matches than 50 mediocre 
             <p>Built to visualize the Claude Cowork job search automation guide</p>
         </div>
     </div>
+    <!-- Email Gate -->
+    <style>
+        body.gated { overflow: hidden; }
+        body.gated .container > *:not(.hero),
+        body.gated .footer { filter: blur(8px); opacity: .3; pointer-events: none; user-select: none; }
+        .gate {
+            position: fixed; inset: 0; z-index: 100;
+            display: none; padding: 16px; overflow-y: auto;
+            background: radial-gradient(ellipse at 50% 30%, rgba(91,140,255,.18), rgba(10,10,10,.75) 60%);
+            backdrop-filter: blur(3px);
+        }
+        body.gated .gate { display: flex; }
+        .gate-card {
+            position: relative; width: 100%; max-width: 440px; margin: auto;
+            padding: 2.25rem 2rem 1.75rem; border-radius: 20px; text-align: center;
+            background:
+                linear-gradient(var(--gray-900), var(--gray-900)) padding-box,
+                linear-gradient(135deg, rgba(91,140,255,.7), rgba(0,212,255,.25) 40%, rgba(168,85,247,.6)) border-box;
+            border: 1px solid transparent;
+            box-shadow: 0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(91,140,255,.15);
+            animation: gate-in .45s ease-out both;
+        }
+        @keyframes gate-in { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+        @media (prefers-reduced-motion: reduce) { .gate-card { animation: none; } }
+        .gate-badge {
+            display: inline-block; margin-bottom: 1rem; padding: .3rem .75rem; border-radius: 999px;
+            font-size: .72rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+            color: var(--accent); background: rgba(163,255,18,.08); border: 1px solid rgba(163,255,18,.25);
+        }
+        .gate-card h2 {
+            font-size: 1.75rem; line-height: 1.15; letter-spacing: -.02em; margin-bottom: .6rem;
+            background: linear-gradient(135deg, #FFFFFF 0%, #5B8CFF 55%, #00D4FF 100%);
+            -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .gate-sub { color: var(--gray-400); font-size: .98rem; margin-bottom: 1.1rem; }
+        .gate-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: .4rem; margin-bottom: 1.6rem; }
+        .gate-chips span {
+            font-size: .78rem; color: var(--gray-300); padding: .25rem .65rem; border-radius: 999px;
+            background: var(--surface); border: 1px solid var(--border-light);
+        }
+        .gate-step {
+            display: flex; align-items: center; gap: .55rem; margin-bottom: .55rem;
+            font-size: .85rem; font-weight: 600; color: var(--gray-200); text-align: left;
+        }
+        .gate-step b {
+            display: inline-grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%;
+            font-size: .75rem; color: var(--dark); background: var(--primary);
+        }
+        /* Substack embed, cropped to its email field + terms and inverted to match the dark card */
+        .gate-embed {
+            height: 110px; overflow: hidden; border-radius: 12px; margin-bottom: 1.25rem;
+            background: #090D11; border: 1px solid var(--border-light);
+        }
+        .gate-embed iframe {
+            display: block; width: 100%; height: 320px; margin-top: -180px; border: 0;
+            filter: invert(1) hue-rotate(180deg);
+        }
+        .gate-continue {
+            display: flex; align-items: center; justify-content: center; gap: .5rem; width: 100%;
+            padding: .9rem 1rem; border: 0; border-radius: 12px; cursor: pointer;
+            font: inherit; font-weight: 600; color: var(--dark); background: var(--accent);
+            box-shadow: 0 8px 24px rgba(163,255,18,.18); transition: transform .15s, box-shadow .15s;
+        }
+        .gate-continue:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(163,255,18,.28); }
+        .gate-continue:disabled { cursor: not-allowed; color: var(--gray-500); background: var(--gray-800); box-shadow: none; }
+        .gate-hint { font-size: .8rem; color: var(--gray-500); margin-top: .5rem; min-height: 1.2em; }
+        .gate-continue:focus-visible { outline: 2px solid var(--white); outline-offset: 2px; }
+        .gate-disclaimer { font-size: .78rem; color: var(--gray-500); margin-top: 1.1rem; line-height: 1.55; }
+        @media (max-width: 480px) {
+            .gate-card { padding: 1.75rem 1.25rem 1.5rem; }
+            .gate-card h2 { font-size: 1.45rem; }
+        }
+    </style>
+
+    <div class="gate" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+        <div class="gate-card">
+            <span class="gate-badge">Free guide</span>
+            <h2 id="gate-title">Unlock the full step-by-step guide</h2>
+            <p class="gate-sub">Everything you need to have Claude run your job search on autopilot.</p>
+            <div class="gate-chips">
+                <span>8 setup steps</span><span>Copy-paste prompts</span><span>Scheduling</span><span>Troubleshooting</span>
+            </div>
+
+            <div class="gate-step"><b>1</b>Subscribe with your email</div>
+            <div class="gate-embed">
+                <iframe src="https://newsletter.maryamreza.com/embed" title="Subscribe to Build with Maryam" scrolling="no"></iframe>
+            </div>
+
+            <div class="gate-step"><b>2</b>Open the guide</div>
+            <button type="button" class="gate-continue" id="gate-continue" disabled aria-describedby="gate-hint">Done, show me the guide <span aria-hidden="true">&rarr;</span></button>
+            <p class="gate-hint" id="gate-hint" aria-live="polite">Subscribe in step 1 first</p>
+
+            <p class="gate-disclaimer">
+                You'll be subscribed to the Build with Maryam newsletter on Substack: practical AI and automation
+                walkthroughs like this one. Unsubscribe anytime.
+            </p>
+        </div>
+    </div>
+
+    <script>
+    (function () {
+        var KEY = 'guide_unlocked';
+        var unlocked = false;
+        try { unlocked = localStorage.getItem(KEY) === '1'; } catch (e) {}
+        if (!unlocked) document.body.classList.add('gated');
+
+        // Soft lock: Substack's box can't report a signup, so enable step 2 only after
+        // the visitor has clicked into the box, plus a short delay to finish subscribing.
+        var WAIT = 9;
+        var btn = document.getElementById('gate-continue'), hint = document.getElementById('gate-hint');
+        var frame = document.querySelector('.gate-embed iframe'), started = false;
+        function startCountdown() {
+            if (started || document.activeElement !== frame) return;
+            started = true;
+            var left = WAIT;
+            (function tick() {
+                if (left <= 0) { btn.disabled = false; hint.textContent = ''; return; }
+                hint.textContent = 'Finish subscribing above, then continue (' + left-- + 's)';
+                setTimeout(tick, 1000);
+            })();
+        }
+        window.addEventListener('blur', function () { setTimeout(startCountdown, 0); });
+        var poll = setInterval(function () { started ? clearInterval(poll) : startCountdown(); }, 500);
+
+        btn.addEventListener('click', function () {
+            if (btn.disabled) return;
+            try { localStorage.setItem(KEY, '1'); } catch (e) {}
+            document.body.classList.remove('gated');
+        });
+    })();
+    </script>
 </body>
 </html>
